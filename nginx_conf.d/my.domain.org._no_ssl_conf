@@ -1,0 +1,12 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # Pass this particular URL off to certbot, to authenticate HTTPS certificates
+    location '/.well-known/acme-challenge' {
+        default_type "text/plain";
+        proxy_pass http://localhost:1337;
+    }
+
+    # No HTTPS redirect yet
+}
