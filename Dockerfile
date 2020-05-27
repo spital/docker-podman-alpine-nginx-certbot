@@ -16,7 +16,7 @@ RUN apk add --no-cache \
        curl ca-certificates certbot \
   && curl https://ssl-config.mozilla.org/ffdhe4096.txt > /etc/nginx/ffdhe4096.pem \
   && echo '#!/bin/sh' > /etc/periodic/daily/certbot \
-  && echo 'sleep $(($(od -An -N3 -l /dev/random)*86300/16777216)) && certbot renew -n --no-self-upgrade --debug' >> /etc/periodic/daily/certbot \
+  && echo 'sleep $(($(od -An -N3 -l /dev/random)*86300/16777216)) && certbot -q renew -n --no-self-upgrade --post-hook "nginx -s reload"' >> /etc/periodic/daily/certbot \
   && chmod 755 /etc/periodic/daily/certbot
 
 ENTRYPOINT []

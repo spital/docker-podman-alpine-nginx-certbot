@@ -14,7 +14,7 @@ sudo dnf install -y make podman podman-compose podman-docker
 docker run hello-world
 docker run -it alpine cat /etc/os-release
 ```
-**Important note:** although podman can run rootless, mapping `--volume` to the host local directory did not work for me even under root. You need to use only named volumes (stored under $HOME/.local/share/containers/storage/volumes/.... or /var/lib/containers/storage/volumes/... for root) and copy config files into container using `docker cp HOST_DIR/FILE nginx-certbot:/DIR/FILE` (or `cp` to mentioned host filesystem directory). Please bear that in mind and amend commands below accordingly. Also podman's image repository is not shared between root and user and they do not see containers started by the other user. Published ports are accessible by everybody of course.
+**Important note:** although podman can run rootless, mapping `--volume` to the host's local directory did not work for me even under root. You need to use only named volumes (stored under $HOME/.local/share/containers/storage/volumes/.... or /var/lib/containers/storage/volumes/... for root) and copy config files into container using `docker cp HOST_DIR/FILE nginx-certbot:/DIR/FILE` (or `cp` to mentioned host's filesystem directory). Please bear that in mind and amend commands below accordingly. Also podman's image repository is not shared between root and user (neither with Docker) and the user does not see containers started by the other user. Published ports are accessible by everybody of course.
 # Usage
 
 Check example in a config directory for your custom configs and build spital/nginx-certbot:
@@ -41,9 +41,9 @@ Check that you receive `502 Bad Gateway` reply from http://localhost:8080/.well-
 Issue a certificate for your DOMAIN and EMAIL from SERVER
 ```bash
 SERVER='https://acme-v02.api.letsencrypt.org/directory'
-DOMAIN=my.domain.org
+DOMAINS=my.domain.org,mywww.domain.org
 EMAIL=my@email.com
-docker exec -it nginx-certbot certbot certonly --non-interactive --domains $DOMAIN \
+docker exec -it nginx-certbot certbot certonly --non-interactive --domains $DOMAINS \
   --standalone --expand --email $EMAIL --agree-tos --keep --text \
   --server $SERVER --http-01-port 1337 \
   --preferred-challenges http-01 --debug
