@@ -72,3 +72,6 @@ Check cron daily cert check is working and add Nginx reload post-hook, test in c
 ```bash
 cat /etc/periodic/daily/certbot
 ```
+... maybe rather /etc/crontabs/root, sort of works, but sometimes crond crashes ?
+
+... maybe rater ditch certbot and use LEGO, supports over 70 DNS providers
